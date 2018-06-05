@@ -1,0 +1,256 @@
+=======================================================================
+Network Security Analysis Exercise - May 29-30, 2014 - Djibouti
+=======================================================================
+
+-----------------------------------------------------------------------
+Part 1 - Basics
+-----------------------------------------------------------------------
+Exercise 1 - Good Old Telnet
+-----------------------------------------------------------------------
+Q1. Identify the role of each machine
+    
+    - 192.168.0.1 is Telnet [          ]
+    - 192.168.0.2 is Telnet [          ]
+
+Q2. Who logged into 192.168.0.1
+    
+    - Username [          ]
+    - Password:[          ]
+
+Q3. After logged in what did the user do?
+
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+
+-----------------------------------------------------------------------
+Exercise 2 - Massive TCP SYN
+-----------------------------------------------------------------------
+Q1. 02-massivesyn1.pcap is a [                          ] attempt.
+
+Q2. 02-massivesyn2.pcap is a [                          ] attempt.
+
+-----------------------------------------------------------------------
+Exercise 3 - Chatty Employees
+-----------------------------------------------------------------------
+Q1. What kind of protocol is used? 
+
+    - [                                                               ]
+
+Q2. This is conversation between 
+
+    - [              ]@hotmail.com and 
+    - [              ]@hotmail.com
+
+Q3. What do they say about you(sysadmin)?
+
+    - [                                                               ]
+
+-----------------------------------------------------------------------
+Exercise 4 - Chatty Employees
+-----------------------------------------------------------------------
+Q1. FTP server's IP address is [                                      ]
+
+Q2. FTP client's IP address is [                                      ]
+
+Q3. FTP Err Code 530 means [                                          ]
+
+Q4. 10.234.125.254 attempt [                                          ]
+
+-----------------------------------------------------------------------
+Exercise 5 - Unidentified Traffic
+-----------------------------------------------------------------------
+Q1. Which appliication use TCP/6346?
+
+    - [                                                               ]
+
+Q2. How many servers was 10.1.4.176 trying to connect?
+
+    - [                                                               ]
+
+Q3. Which servers could 10.1.4.176 could connect successfully (at
+    least TCP/IP level)?
+
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+
+-----------------------------------------------------------------------
+Exercise 6 - Compare the traffic
+-----------------------------------------------------------------------
+Q1. Jim must 
+
+    - [                                                               ]
+
+
+-----------------------------------------------------------------------
+Part 2 - Advanced 
+-----------------------------------------------------------------------
+Exercise 7 - Behind the scene...
+-----------------------------------------------------------------------
+Q1. What is the attacker's IP address and MAC address?
+
+    - IP address  [                                                   ]
+    - MAC address [                                                   ]
+
+Q2. What is the direct victim's IP address and MAC address?
+
+    - IP address  [                                                   ]
+    - MAC address [                                                   ]
+
+Q3. What is the victim's role in this network?
+
+    - [                                                               ]
+
+Q4. What type of attack was happening?
+
+    - [                                                               ]
+
+Q5. What type of packet is malicious packet in this attack?
+
+    - [                                                               ]
+
+Q6. Was this attack success of not?
+
+    - Result [ (Successful / Not successful)                          ]
+    - Reason [                                                        ]
+
+Q7. What kind of countermeasures are useful for this attack?
+
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+
+-----------------------------------------------------------------------
+Exercise 8 - Someone is already in...
+-----------------------------------------------------------------------
+Q1. What is the malicious server's IP address?
+
+    - [                                                               ]
+
+Q2. What kind of malicious activity did this malware do?
+
+    - [                                                               ]
+
+-----------------------------------------------------------------------
+Exercise 9 - Something is stolen...
+-----------------------------------------------------------------------
+Q1. Malicious server's IP address is
+ 
+    - [                                                               ]
+
+Q2. Data sent by malware is including
+
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+
+-----------------------------------------------------------------------
+Exercise 10 - Aurora
+-----------------------------------------------------------------------
+Q1. Which site and which page were defaced?
+
+    - site [                                                          ]
+    - page [                                                          ]
+
+Q2. Which URL looks malicious?
+
+    - [                                                               ]
+
+Q3. Which software seemed to be the target of this exploit?
+
+    - [                                                               ]
+
+Q4. What kind of malicioius activity was executed after exploit?
+
+    - [                                                               ]
+
+
+-----------------------------------------------------------------------
+Exercise 11 - SSL Storm?
+-----------------------------------------------------------------------
+Q1. How many sites did this client send packet to?
+
+    - [                                                               ]
+
+Q2. Which TCP port did this client sent packet other than 443/tcp?
+    
+    - [                                                               ]
+
+Q3. Which protocol seemed to be used the sessions via port of Q2's
+    answer?
+
+    - [                                                               ]
+
+Q4. Are there any difference between packets sent via 443/tcp in this
+    pcap and normal SSL?
+
+    - [                                                               ]
+
+
+-----------------------------------------------------------------------
+Exercise 12 - Zero and Infinite
+-----------------------------------------------------------------------
+Q1. What does the TCP ZeroWindow mean?
+
+    - [                                                               ]
+
+Q2. How many TCP ZeroWindow packets were used in this attack?
+
+    - [                                                               ]
+
+Q3. How much speed(bps) is the maximum in this attack?
+    - maximum speed(bps) [                                            ]
+    - [ high / low                                                    ]
+
+Q4. Why 10.0.0.101 sends several Keep-Alive packets after receiving
+    TCP ZeroWindow annouce?
+
+    - [                                                               ]
+
+Q5. How many sessions are finished or terminated during this attack?
+
+    - [                                                               ]
+
+Q6. Why client couldn't get the reply from the server during this
+    attack?
+
+    - [                                                               ]
+
+Q7. What type (or class) of attack has occurred?
+
+    - [                                                               ]
+-----------------------------------------------------------------------
+Exercise 13 - Don't ask me
+-----------------------------------------------------------------------
+Q1. What type of packet triggered the problem?
+
+    - [                                                               ]
+
+Q2. How big is the DNS reply packet?
+
+    - [                                                               ]
+
+Q3. What type of attack was happening here?
+    - [                                                               ]
+
+Q4. Which machines are victims?
+
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+
+Q5. What is DNS server's role in this attack?
+
+    - [                                                               ]
+
+Q7. What kind of counter measures are effective for this attack?
+
+    - [                                                               ]
+    - [                                                               ]
+    - [                                                               ]
+
+=======================================================================
