@@ -1,1 +1,2 @@
-Redirect permanent /~kchr/ https://www.sparky.jp/
+RewriteEngine On
+RewriteRule ^(.*)$ https://www.sparky.jp/ 
