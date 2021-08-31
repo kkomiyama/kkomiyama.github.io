@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>20210914.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E6%96%87%E7%B3%BB%E5%8B%89%E5%BC%B7%E4%BC%9A-vol1-%E3%82%B5%E3%82%A4%E3%83%90%E3%83%BC%E6%94%BB%E6%92%83%E3%81%AE%E3%82%A2%E3%83%88%E3%83%AA%E3%83%93%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3">文系勉強会 vol.1 「サイバー攻撃のアトリビューション」</h1>
+<center><img src="images/08-31-14-24-42.png" width="50%" /></center>
+<h2 id="%E8%83%8C%E6%99%AF">背景</h2>
+<p>パブリック・アトリビューションについては世界中で様々な試行錯誤がなされ、米国や英国を中心に各国が積極的な動きを見せている。国内でも、日本政府が本年4月と7月に中国政府を背景に持つサイバー攻撃グループに対する非難を実施した事例が注目を集めたが、パブリック・アトリビューションの概念は学術研究上も発展の途上にあり、実務上もこのプロセスをめぐり各国が目指す方向・道筋・産官学の役割分担などの未解決の課題と向き合う上で、技術・政治・法的な観点も踏まえた学際/業際的な議論が求められている</p>
+<!-- 一方で技術コミュニティには、この問題への諦めに似た感情が広がりつつある。技術的な証拠の積み重ねでは、十分な精度の攻撃者特定はできない。パブリック・アトリビューションのプロセスにおける技術的な分析は、結局は政治決定に上書きされる宿命にあるのではないかという諦めである。 -->
+<p>この勉強会では、この問題に向き合う3人の研究者を招き、それぞれ最近公開された論文をベースに、分析を発表していただき、政府・民間・アカデミアなど幅広いバックグラウンドを持つ専門家と議論を交わしていただく。国際法体系との整合性ある、技術的に正確な、パブリック・アトリビューションを行うにはどうしたらよいのか。それがこの勉強会の主たる問いである。</p>
+<h2 id="%E6%97%A5%E6%99%82">日時</h2>
+<p>日付: 9月14日 火曜日 (確定)<br>
+時間: 16:00-18:00(確定)</p>
+<h2 id="%E5%A0%B4%E6%89%80">場所</h2>
+<p>以下のZoomを使用する。</p>
+<blockquote>
+<p>https://us02web.zoom.us/j/87636121088?pwd=VE5yaUdzSFlFbk5WYjdJWGpiYTJKUT09<br>
+ミーティングID: 876 3612 1088<br>
+パスコード: dM0cR0</p>
+</blockquote>
+<h2 id="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0">プログラム</h2>
+<h3 id="1600-1630-%E7%99%BA%E8%A1%A8%E8%80%851-%E7%80%AC%E6%88%B8-%E5%B4%87%E5%BF%97%E9%98%B2%E8%A1%9B%E7%A0%94%E7%A9%B6%E6%89%80">16:00-16:30 発表者1: 瀬戸 崇志(防衛研究所)</h3>
+<p>論文: <a href="http://www.nids.mod.go.jp/publication/commentary/pdf/commentary179.pdf">瀬戸崇志. 2021. “国家のサイバー攻撃とパブリック・アトリビューション: ファイブ・アイズ諸国のアトリビューション連合とSolarWinds事案対応.” NIDSコメンタリー 179.</a></p>
+<h3 id="1630-1700-%E7%99%BA%E8%A1%A8%E8%80%852-%E4%BD%90%E6%9C%A8-%E5%8B%87%E4%BA%BAjpcertcc">16:30-17:00 発表者2: 佐々木 勇人(JPCERT/CC)</h3>
+<p>論文: 佐々木勇人. 2021. “パブリックアトリビューションの課題 ― 大規模なサイバー攻撃や 国際的イベントへのサイバー攻撃事例から―.” CISTECジャーナル (194): 130–38.</p>
+<h3 id="1700-1730-%E7%99%BA%E8%A1%A8%E8%80%853-%E6%B8%85%E6%B0%B4-%E7%BF%94%E9%98%B2%E8%A1%9B%E5%A4%A7%E5%AD%A6%E6%A0%A1%E7%B7%8F%E5%90%88%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C%E7%A0%94%E7%A9%B6%E7%A7%91">17:00-17:30 発表者3: 清水 翔(防衛大学校総合安全保障研究科)</h3>
+<p>論文: <a href="https://www.jstage.jst.go.jp/article/inlaw/19/0/19_190007/_article/-char/ja">清水翔. 2020. “国家間サイバー攻撃の法的アトリビューション—国際司法裁判所における「証拠偏在」論の再構成—.” 情報ネットワーク・ローレビュー 19: 121–33.</a><br>
+レジュメ: <a href="./%E6%B8%85%E6%B0%B4%E3%83%AC%E3%82%B8%E3%83%A5%E3%83%A1.docx">ダウンロード</a></p>
+<h3 id="1730-1800-%E5%85%A8%E4%BD%93%E3%82%92%E9%80%9A%E3%81%97%E3%81%9F%E8%B3%AA%E7%96%91%E5%BF%9C%E7%AD%94">17:30-18:00 全体を通した質疑応答</h3>
+<p>進行: 持永大</p>
+<h3 id="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AB%E9%96%A2%E9%80%A3%E3%81%99%E3%82%8B%E8%AB%B8%E6%B3%A8%E6%84%8F">プログラムに関連する諸注意</h3>
+<ul>
+<li>時間配分としては全体として1時間半を想定しています。発表者の3名はそれぞれ20分の発表をお願いします。その後に10分のQAセッションを行います。最後に30分の全体での議論の時間をとります。</li>
+<li>本会合の詳細な記録などは作成せず、会合の内容はチャタムハウスルールに基づいて、発言者を特定する情報を落として共有をお願いします。</li>
+<li>クローズドなイベントですが、発表者は機微な内容などを発表に含めないよう配慮ください。</li>
+</ul>
+<h2 id="%E5%8F%82%E5%8A%A0%E8%80%85%E3%83%AA%E3%82%B9%E3%83%88">参加者リスト</h2>
+<p>会議の参加者は以下の通りです。適宜更新します。</p>
+<ul>
+<li>瀬戸崇志</li>
+<li>清水翔</li>
+<li>持永大</li>
+<li>佐々木勇人</li>
+<li>小宮山功一朗</li>
+</ul>
+<!-- 誘おうと思っている人:
+片山健(Toyota)
+小泉悠(東大)
+川口 貴久(東京海上日動リスクコンサルティング)
+長迫さん(笹川)
+上田さん(NEC)
+その他複数。今回テーマ的に霞が関をいれると口が重くなってしまうのを懸念。 -->
+<h2 id="%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">問い合わせ</h2>
+<p>小宮山功一朗<br>
+<em>komiyamaアットGメールドットコム</em></p>
+
+</body>
+</html>
