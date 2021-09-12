@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>文系勉強会 vol.1 「サイバー攻撃のアトリビューション」</title>
+  <style>
+     body {
+        font-family: Helvetica, arial, sans-serif;
+        font-size: 16px;
+        line-height: 2;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: white;
+        padding: 30px;
+      }
+  
+      body>*:first-child {
+        margin-top: 0 !important;
+      }
+  
+      body>*:last-child {
+        margin-bottom: 0 !important;
+      }
+  
+      a {
+        color: #4183C4;
+      }
+  
+      a.absent {
+        color: #cc0000;
+      }
+  
+      a.anchor {
+        * display: block;
+        padding-left: 30px;
+        margin-left: -30px;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0; *
+      }
+  
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 20px 0 10px;
+        padding: 0;
+        font-weight: bold;
+        -webkit-font-smoothing: antialiased;
+        cursor: text;
+        position: relative;
+      }
+  
+  
+      /* h1 tt,
+      h1 code {
+        font-size: inherit;
+      }
+  
+      h2 tt,
+      h2 code {
+        font-size: inherit;
+      }
+  
+      h3 tt,
+      h3 code {
+        font-size: inherit;
+      }
+  
+      h4 tt,
+      h4 code {
+        font-size: inherit;
+      }
+  
+      h5 tt,
+      h5 code {
+        font-size: inherit;
+      }
+  
+      h6 tt,
+      h6 code {
+        font-size: inherit;
+      } */
+  
+      h1 {
+        font-size: 32px;
+        color: black;
+      }
+  
+      h2 {
+        font-size: 24px;
+        border-bottom: 1px solid #cccccc;
+        color: black;
+      }
+  
+      h3 {
+        font-size: 18px;
+      }
+  
+      h4 {
+        font-size: 16px;
+      }
+  
+      h5 {
+        font-size: 14px;
+      }
+  
+      h6 {
+        color: #777777;
+        font-size: 14px;
+      }
+  
+      p,
+      blockquote,
+      ul,
+      ol,
+      dl,
+      li,
+      table,
+      pre {
+        margin: 15px 0;
+      }
+  
+      hr {
+        background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+        border: 0 none;
+        color: #cccccc;
+        height: 4px;
+        padding: 0;
+      }
+/*   
+      body>h2:first-child {
+        margin-top: 0;
+        padding-top: 0;
+      }
+  
+      body>h1:first-child {
+        margin-top: 0;
+        padding-top: 0;
+      }
+  
+      body>h1:first-child+h2 {
+        margin-top: 0;
+        padding-top: 0;
+      }
+  
+      body>h3:first-child,
+      body>h4:first-child,
+      body>h5:first-child,
+      body>h6:first-child {
+        margin-top: 0;
+        padding-top: 0;
+      }
+  
+      a:first-child h1,
+      a:first-child h2,
+      a:first-child h3,
+      a:first-child h4,
+      a:first-child h5,
+      a:first-child h6 {
+        margin-top: 0;
+        padding-top: 0;
+      } */
+  
+      h1 p,
+      h2 p,
+      h3 p,
+      h4 p,
+      h5 p,
+      h6 p {
+        margin-top: 0;
+      }
+  
+      li p.first {
+        display: inline-block;
+      }
+  
+      li {
+        margin: 0;
+      }
+  
+      ul,
+      ol {
+        padding-left: 30px;
+      }
+  
+      ul :first-child,
+      ol :first-child {
+        margin-top: 0;
+      }
+  
+      dl {
+        padding: 0;
+      }
+  
+      dl dt {
+        font-size: 14px;
+        font-weight: bold;
+        font-style: italic;
+        padding: 0;
+        margin: 15px 0 5px;
+      }
+  
+      dl dt:first-child {
+        padding: 0;
+      }
+  
+      dl dt> :first-child {
+        margin-top: 0;
+      }
+  
+      dl dt> :last-child {
+        margin-bottom: 0;
+      }
+  
+      /* dl dd {
+        margin: 0 0 15px;
+        padding: 0 15px;
+      }
+  
+      dl dd> :first-child {
+        margin-top: 0;
+      }
+  
+      dl dd> :last-child {
+        margin-bottom: 0;
+      } */
+  
+      blockquote {
+        border-left: 4px solid #413e3e;
+        padding: 0 15px;
+        color: #777777;
+      }
+  
+      blockquote> :first-child {
+        margin-top: 0;
+      }
+  
+      blockquote> :last-child {
+        margin-bottom: 0;
+      }
+  
+      table {
+        padding: 0;
+        border-collapse: collapse;
+      }
+  
+      table tr {
+        border-top: 1px solid #cccccc;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+      }
+  
+      table tr:nth-child(2n) {
+        background-color: #f8f8f8;
+      }
+  
+      table tr th {
+        font-weight: bold;
+        border: 1px solid #cccccc;
+        margin: 0;
+        padding: 6px 13px;
+      }
+  
+      table tr td {
+        border: 1px solid #cccccc;
+        margin: 0;
+        padding: 6px 13px;
+      }
+  
+      table tr th :first-child,
+      table tr td :first-child {
+        margin-top: 0;
+      }
+  
+      table tr th :last-child,
+      table tr td :last-child {
+        margin-bottom: 0;
+      }
+  
+      img {
+        max-width: 100%;
+      }
+  
+      span.frame {
+        display: block;
+        overflow: hidden;
+      }
+  
+      span.frame>span {
+        border: 1px solid #dddddd;
+        display: block;
+        float: left;
+        overflow: hidden;
+        margin: 13px 0 0;
+        padding: 7px;
+        width: auto;
+      }
+  
+      span.frame span img {
+        display: block;
+        float: left;
+      }
+  
+      span.frame span span {
+        clear: both;
+        color: #333333;
+        display: block;
+        padding: 5px 0 0;
+      }
+  
+      span.align-center {
+        display: block;
+        overflow: hidden;
+        clear: both;
+      }
+  
+      span.align-center>span {
+        display: block;
+        overflow: hidden;
+        margin: 13px auto 0;
+        text-align: center;
+      }
+  
+      span.align-center span img {
+        margin: 0 auto;
+        text-align: center;
+      }
+  
+      span.align-right {
+        display: block;
+        overflow: hidden;
+        clear: both;
+      }
+  
+      span.align-right>span {
+        display: block;
+        overflow: hidden;
+        margin: 13px 0 0;
+        text-align: right;
+      }
+  
+      span.align-right span img {
+        margin: 0;
+        text-align: right;
+      }
+  
+      span.float-left {
+        display: block;
+        margin-right: 13px;
+        overflow: hidden;
+        float: left;
+      }
+  
+      span.float-left span {
+        margin: 13px 0 0;
+      }
+  
+      span.float-right {
+        display: block;
+        margin-left: 13px;
+        overflow: hidden;
+        float: right;
+      }
+  
+      span.float-right>span {
+        display: block;
+        overflow: hidden;
+        margin: 13px auto 0;
+        text-align: right;
+      }
+  
+      code,
+      tt {
+        margin: 0 2px;
+        padding: 0 5px;
+        white-space: nowrap;
+        border: 1px solid #eaeaea;
+        background-color: #f8f8f8;
+        border-radius: 3px;
+      }
+  
+      pre code {
+        margin: 0;
+        padding: 0;
+        white-space: pre;
+        border: none;
+        background: transparent;
+      }
+  
+      .highlight pre {
+        background-color: #f8f8f8;
+        border: 1px solid #cccccc;
+        font-size: 13px;
+        line-height: 19px;
+        overflow: auto;
+        padding: 6px 10px;
+        border-radius: 3px;
+      }
+  
+      pre {
+        background-color: #f8f8f8;
+        border: 1px solid #cccccc;
+        font-size: 13px;
+        line-height: 19px;
+        overflow: auto;
+        padding: 6px 10px;
+        border-radius: 3px;
+      }
+  
+      pre code,
+      pre tt {
+        background-color: transparent;
+        border: none;
+      }
+  
+      sup {
+        font-size: 0.83em;
+        vertical-align: super;
+        line-height: 0;
+      }
+  
+      * {
+        -webkit-print-color-adjust: exact;
+      }
+  
+      @media screen and (min-width: 914px) {
+        body {
+          width: 854px;
+          margin: 0 auto;
+        }
+      }
+  
+      @media print {
+  
+        table,
+        pre {
+          page-break-inside: avoid;
+        }
+  
+        pre {
+          word-wrap: break-word;
+        }
+      }
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">文系勉強会 vol.1 「サイバー攻撃のアトリビューション」</h1>
+</header>
+<center>
+<img src="images/08-31-14-24-42.png" width="5%" />
+</center>
+<h1 id="背景">背景</h1>
+<p>パブリック・アトリビューションについては世界中で様々な試行錯誤がなされ、米国や英国を中心に各国が積極的な動きを見せている。国内でも、日本政府が本年4月と7月に中国政府を背景に持つサイバー攻撃グループに対する非難を実施した事例が注目を集めたが、パブリック・アトリビューションの概念は学術研究上も発展の途上にあり、実務上もこのプロセスをめぐり各国が目指す方向・道筋・産官学の役割分担などの未解決の課題と向き合う上で、技術・政治・法的な観点も踏まえた学際/業際的な議論が求められている</p>
+<!-- 一方で技術コミュニティには、この問題への諦めに似た感情が広がりつつある。技術的な証拠の積み重ねでは、十分な精度の攻撃者特定はできない。パブリック・アトリビューションのプロセスにおける技術的な分析は、結局は政治決定に上書きされる宿命にあるのではないかという諦めである。 -->
+<p>この勉強会では、この問題に向き合う3人の研究者を招き、それぞれ最近公開された論文をベースに、分析を発表していただき、政府・民間・アカデミアなど幅広いバックグラウンドを持つ専門家と議論を交わしていただく。国際法体系との整合性ある、技術的に正確な、パブリック・アトリビューションを行うにはどうしたらよいのか。それがこの勉強会の主たる問いである。</p>
+<h1 id="日時">日時</h1>
+<p>日付: 9月14日 火曜日 (確定)<br />
+時間: 16:00-18:00(確定)</p>
+<h1 id="場所">場所</h1>
+<p>以下のZoomを使用する。</p>
+<blockquote>
+<p><a href="https://us02web.zoom.us/j/87636121088?pwd=VE5yaUdzSFlFbk5WYjdJWGpiYTJKUT09">https://us02web.zoom.us/j/87636121088?pwd=VE5yaUdzSFlFbk5WYjdJWGpiYTJKUT09</a><br />
+ミーティングID: 876 3612 1088<br />
+パスコード: dM0cR0</p>
+</blockquote>
+<center>
+<img src="images/08-31-14-24-42.png" width="5%" />
+</center>
+<h1 id="プログラム">プログラム</h1>
+<h2 id="発表者1-瀬戸-崇志防衛研究所">16:00-16:30 発表者1: 瀬戸 崇志(防衛研究所)</h2>
+<p>論文: <a href="http://www.nids.mod.go.jp/publication/commentary/pdf/commentary179.pdf">瀬戸崇志. 2021. “国家のサイバー攻撃とパブリック・アトリビューション: ファイブ・アイズ諸国のアトリビューション連合とSolarWinds事案対応.” NIDSコメンタリー 179.</a></p>
+<h2 id="発表者2-佐々木-勇人jpcertcc">16:30-17:00 発表者2: 佐々木 勇人(JPCERT/CC)</h2>
+<p>論文: 佐々木勇人. 2021. “パブリックアトリビューションの課題 ― 大規模なサイバー攻撃や 国際的イベントへのサイバー攻撃事例から―.” CISTECジャーナル (194): 130–38.</p>
+<h2 id="発表者3-清水-翔防衛大学校総合安全保障研究科">17:00-17:30 発表者3: 清水 翔(防衛大学校総合安全保障研究科)</h2>
+<p>論文: <a href="https://www.jstage.jst.go.jp/article/inlaw/19/0/19_190007/_article/-char/ja">清水翔. 2020. “国家間サイバー攻撃の法的アトリビューション—国際司法裁判所における「証拠偏在」論の再構成—.” 情報ネットワーク・ローレビュー 19: 121–33.</a><br />
+レジュメ: <a href="./清水レジュメ.pdf">ダウンロード</a></p>
+<h2 id="全体を通した質疑応答">17:30-18:00 全体を通した質疑応答</h2>
+<p>進行: 持永大</p>
+<h2 id="プログラムに関連する諸注意">プログラムに関連する諸注意</h2>
+<ul>
+<li>時間配分としては全体として2時間を想定しています。発表者の3名はそれぞれ20分の発表をお願いします。各自の発表の後に10分のQAセッションを行います。最後に30分の全体での議論の時間をとります。</li>
+<li>本会合の詳細な記録などは作成せず、会合の内容はチャタムハウスルールに基づいて、発言者を特定する情報を落として共有をお願いします。</li>
+<li>クローズドなイベントですが、発表者は機微な内容などを発表に含めないよう配慮ください。</li>
+</ul>
+<center>
+<img src="images/08-31-14-24-42.png" width="5%" />
+</center>
+<h1 id="参加者リスト">参加者リスト</h1>
+<p>会議の参加者は以下の通りです。適宜更新します。(順不同、敬称略。)</p>
+<ul>
+<li>瀬戸 崇志</li>
+<li>清水 翔</li>
+<li>茂木 隆宏</li>
+<li>持永 大</li>
+<li>佐々木 勇人</li>
+<li>小宮山 功一朗</li>
+<li>上田 格</li>
+<li>川口 貴久</li>
+<li>桒原 響子</li>
+<li>片山 建</li>
+<li>小泉 悠</li>
+<li>鈴木 研吾</li>
+<li>四方 千紘</li>
+<li>土屋 大洋</li>
+<li>助川 康</li>
+<li>長迫 智子</li>
+</ul>
+<h1 id="問い合わせ">問い合わせ</h1>
+<p>小宮山功一朗<br />
+<em>komiyamaアットGメールドットコム</em></p>
+</body>
+</html>
