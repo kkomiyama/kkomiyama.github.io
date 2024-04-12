@@ -17,7 +17,7 @@
       }
 
       a {
-        color: #4183C4;
+        color: #0766c5;
       }
 
       a.absent {
@@ -128,7 +128,11 @@
         margin: 15px 0;
       }
       .jpsub {
-          color: #8a8787;
+          color: #636060;
+      }
+      .right {
+        display: flex;
+        justify-content: flex-end;
       }
 
       hr {
