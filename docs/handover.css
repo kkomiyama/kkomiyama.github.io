@@ -1,0 +1,253 @@
+/* 全体のスタイル */
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  padding: 30px;
+  background-color: white;
+  color: #333;
+}
+
+/* 見出しのスタイル */
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative;
+}
+
+h1 {
+  font-size: 32px;
+  color: #ff4500; /* オレンジ */
+}
+
+h2 {
+  font-size: 28px;
+  border-bottom: 2px solid #ff4500; /* オレンジ */
+  color: #ff4500; /* オレンジ */
+}
+
+h3 {
+  font-size: 24px;
+  color: #1e90ff; /* ネイビー */
+}
+
+h4 {
+  font-size: 20px;
+  color: #1e90ff; /* ネイビー */
+}
+
+h5 {
+  font-size: 18px;
+  color: #1e90ff; /* ネイビー */
+}
+
+h6 {
+  color: #1e90ff; /* ネイビー */
+  font-size: 18px;
+}
+
+/* リンクのスタイル */
+a {
+  color: #1e90ff; /* ネイビー */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a.absent {
+  color: #dc143c;
+}
+
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+/* 段落とリストのスタイル */
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0;
+}
+
+ul, ol {
+  padding-left: 30px;
+}
+
+blockquote {
+  border-left: 4px solid #ff4500; /* オレンジ */
+  padding: 0 15px;
+  color: #555;
+  background-color: #fffaf0;
+}
+
+/* テーブルのスタイル */
+table {
+  padding: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table tr {
+  border-top: 1px solid #cccccc;
+  background-color: white;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+table th, table td {
+  border: 1px solid #cccccc;
+  text-align: left;
+  padding: 8px 15px;
+}
+
+/* コードブロックのスタイル */
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 15px;
+  line-height: 21px;
+  overflow: auto;
+  padding: 8px 12px;
+  border-radius: 3px;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 15px;
+  line-height: 21px;
+  overflow: auto;
+  padding: 8px 12px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+/* 画像のスタイル */
+img {
+  max-width: 80%;
+  border: 2px #0f0f0f solid;
+  border-radius: 5px;
+}
+
+/* フレームのスタイル */
+span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+span.frame > span {
+  border: 1px solid #dddddd;
+  display: block;
+  float: left;
+  overflow: hidden;
+  margin: 13px 0 0;
+  padding: 7px;
+  width: auto;
+}
+
+span.frame span img {
+  display: block;
+  float: left;
+}
+
+span.frame span span {
+  clear: both;
+  color: #333333;
+  display: block;
+  padding: 5px 0 0;
+}
+
+/* アラインメントのスタイル */
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+span.align-center > span {
+  display: block;
+  overflow: hidden;
+  margin: 13px auto 0;
+  text-align: center;
+}
+
+span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+span.align-right > span {
+  display: block;
+  overflow: hidden;
+  margin: 13px 0 0;
+  text-align: right;
+}
+
+span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left;
+}
+
+span.float-left span {
+  margin: 13px 0 0;
+}
+
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right;
+}
+
+span.float-right > span {
+  display: block;
+  overflow: hidden;
+  margin: 13px auto 0;
+  text-align: right;
+}
