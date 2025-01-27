@@ -1,5 +1,8 @@
     body {
-        font-family: "Noto Serif JP", "Noto Sans JP", Helvetica, Arial, sans-serif ;
+        font-family: "Noto Sans JP", Helvetica, Arial, serif ;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
         font-size: 17px;
         line-height: 1.6;
         padding-top: 10px;
@@ -39,7 +42,7 @@
         -webkit-font-smoothing: antialiased;
         cursor: text;
         position: relative;
-        font-family: "Noto Sans JP"; // 見出しはこのフォント
+        color: #e33c17;
       }
 
       h1 {
@@ -83,8 +86,11 @@
       .jpsub {
           color: #9c9898;
           font-size: smaller;
-          font-family: "Noto Serif JP";
-      }
+          font-family: "Noto Sans JP", Helvetica, Arial, serif ;
+          font-optical-sizing: auto;
+          font-weight: 400;
+          font-style: normal;
+        }
       .right {
         display: flex;
         justify-content: flex-end;
