@@ -34,40 +34,47 @@
       document.write("Modified: " + y + "/" + m + "/" + d);
     </script>
   </div>
-  <nav id="table-of-contents" style="text-align:center;">
-    <a href="#Papers">Papers</a> /
-    <a href="#Books">Books</a> /
-    <a href="#Presentations">Presentations</a> /
-    <a href="#Course">Course</a> /
-    <a href="#Others">Other works</a> |
-    <a href="#CV">CV</a> |
-    <a href="#Contact">Contact</a> |
-    <a href="https://blog.sparky.jp">Blog</a>
+  <p>
+  <nav id="table-of-contents">
+    <center>
+      <!-- <a href="#Affiliation">Affiliation</a> | -->
+      <a href="#Papers">Papers</a> /
+      <a href="#Books">Books</a> /
+      <a href="#Presentations">Presentations</a> /
+      <a href="#Course">Course</a> /
+      <a href="#Others">Other works</a> |
+      <a href="#CV">CV</a> |
+      <a href="#Contact">Contact</a> |
+      <a href="https://blog.sparky.jp">Blog</a>
+    </center>
   </nav>
-  <div style="text-align:center;">
-    <script type="text/javascript">
-      var imglist = new Array(
-         "./photos/top/hotel.jpg",
-         "./photos/top/IMG_3177.jpg",
-         "./photos/top/IMG_4276.jpg",
-         "./photos/top/IMG_4129.jpg",
-         "./photos/top/IMG_4148.jpg",
-         "./photos/top/IMG_5423.jpg",
-         "./photos/top/IMG_2423.jpg",
-         "./photos/top/IMG_5445.jpg",
-         "./photos/top/DSC03942.jpg",
-         "./photos/top/IMG_2959.jpg",
-         "./photos/top/PANO.jpg",
-         "./photos/top/DSC04508.jpg",
-         "./photos/top/hotel.jpg",
-         "./photos/watermelonchallenge.png",
-         "./photos/moonwalk.jpg",
-         "./photos/top/DSC06963.jpg"
-         );
-      var selectnum = Math.floor(Math.random() * imglist.length);
-      var output = "<img src='" + imglist[selectnum] + "' alt='Random photo'>";
-      document.write(output);
-   </script>
+  </p>
+  <div>
+    <center>
+      <script type="text/javascript">
+        var imglist = new Array(
+           "./photos/top/hotel.jpg",
+           "./photos/top/IMG_3177.jpg",
+           "./photos/top/IMG_4276.jpg",
+           "./photos/top/IMG_4129.jpg",
+           "./photos/top/IMG_4148.jpg",
+           "./photos/top/IMG_5423.jpg",
+           "./photos/top/IMG_2423.jpg",
+           "./photos/top/IMG_5445.jpg",
+           "./photos/top/DSC03942.jpg",
+           "./photos/top/IMG_2959.jpg",
+           "./photos/top/PANO.jpg",
+           "./photos/top/DSC04508.jpg",
+           "./photos/top/hotel.jpg",
+           "./photos/watermelonchallenge.png",
+           "./photos/moonwalk.jpg",
+           "./photos/top/DSC06963.jpg"
+           );
+        var selectnum = Math.floor(Math.random() * imglist.length);
+        var output = "<img src=" + imglist[selectnum] + ">";
+        document.write(output);
+     </script>
+    </center>
   </div>
 
   <h2 id="Affiliation">Affiliation
@@ -151,9 +158,9 @@
     <li>佐々木良一監修、日本ネットワークセキュリティ協会教育部会著『情報セキュリティプロフェッショナル教科書』アスキー・メディアワークス、2009 (「第2章攻撃の対象と攻撃の手法」3節及び「第8章PCの防御」を担当。 </li>
   </ul>
   <p class="align-center">
-    <img src="photos/obi-kasousensou.jpg" alt="仮想戦争の終わり 表紙">
-    <img src="photos/obi-disinformation.jpg" alt="偽情報戦争 表紙">
-    <img src="photos/obi-cyberspace.jpg" alt="サイバースペースの地政学 表紙">
+    <img src="photos/obi-kasousensou.jpg" alt="image">
+    <img src="photos/obi-disinformation.jpg" alt="image">
+    <img src="photos/obi-cyberspace.jpg" alt="image">
   </p>
   <h3 id="Presentations">Presentations
     <span class="jpsub">口頭発表</span>
@@ -755,6 +762,8 @@
     });
   </script>
 </div>
+
+  <br>
 
 </body>
 
