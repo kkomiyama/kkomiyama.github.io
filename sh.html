@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>South Happy 52</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #d0d0d0;
+            color: #000000;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 18px;
+        }
+
+        .game-container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            border-top: 3px solid #000;
+            border-bottom: 3px solid #000;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .game-state {
+            border: 2px solid #888;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #e8e8e8;
+        }
+
+        .table-card {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .hand-container {
+            margin: 20px 0;
+        }
+
+        .hand-cards {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .card {
+            padding: 12px 16px;
+            border: 2px solid #666;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.2s;
+            min-width: 50px;
+            text-align: center;
+            color: #000;
+        }
+
+        .card:hover {
+            background-color: #eee;
+            transform: translateY(-2px);
+        }
+
+        .card.playable {
+            background-color: #fff;
+            color: #000;
+            border-color: #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.playable:hover {
+            background-color: #f5f5f5;
+        }
+
+        .card.spade {
+            color: #000;
+        }
+
+        .card.heart {
+            color: #cc0000;
+        }
+
+        .card.diamond {
+            color: #dd8800;
+        }
+
+        .card.club {
+            color: #008800;
+        }
+
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .button {
+            background-color: #e0e0e0;
+            color: #000;
+            border: 2px solid #888;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .button:hover {
+            background-color: #d0d0d0;
+            border-color: #666;
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .message.success {
+            background-color: #d4e6d4;
+            border: 1px solid #4caf50;
+            color: #000;
+        }
+
+        .message.error {
+            background-color: #f0d0d0;
+            border: 1px solid #f44336;
+            color: #000;
+        }
+
+        .message.info {
+            background-color: #d0e0f0;
+            border: 1px solid #2196f3;
+            color: #000;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .results {
+            background-color: #e8e8e8;
+            border: 2px solid #888;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .rules {
+            background-color: #e8f4e8;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .card-list {
+            display: none;
+            background-color: #e8e8e8;
+            border: 2px solid #888;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .suit-row {
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
+        .suit-symbol {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .hand-cards {
+                gap: 5px;
+            }
+
+            .card {
+                padding: 8px 10px;
+                font-size: 16px;
+                min-width: 40px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="title">South Happy 52</div>
+
+        <div id="rules" class="rules" style="display: none;">
+            <strong>ルール:</strong><br>
+            ・手札から台札と同じマークまたは数字のカードを出す<br>
+            ・出せなくなるまで続ける<br>
+            ・52枚全部出し切れば100倍配当！<br>
+            ・ポーカー役でボーナス配当！<br>
+            ・カードをクリックして選択<br>
+            ・キーボードでA,S,D,F,Gキーでも操作可能<br>
+            ・Rキーで新しいゲーム<br>
+            ・結果画面でEnter/Spaceキーでもう一度プレイ
+        </div>
+
+        <div class="controls">
+            <button class="button" onclick="startNewGame()">新しいゲーム</button>
+            <button class="button" onclick="toggleRules()">ルール表示</button>
+            <button class="button" onclick="toggleCardList()">カード一覧</button>
+            <button class="button" onclick="showStats()">統計表示</button>
+        </div>
+
+        <div id="message" class="message" style="display: none;"></div>
+
+        <div id="gameState" class="game-state" style="display: none;">
+            <div class="stats">
+                <span>台札: <span id="tableCard"></span></span>
+                <span>出したカード数: <span id="cardsPlayed">0</span>/52</span>
+                <span>残りデッキ: <span id="remainingDeck">0</span>枚</span>
+            </div>
+
+            <div class="hand-container">
+                <div>あなたの手札:</div>
+                <div id="handCards" class="hand-cards"></div>
+            </div>
+        </div>
+
+        <div id="cardList" class="card-list">
+            <h3>カード一覧</h3>
+            <div><strong>【手札】</strong></div>
+            <div id="handCardsList"></div>
+            <div style="margin-top: 15px;"><strong>【残りデッキ】</strong></div>
+            <div id="deckCardsList"></div>
+        </div>
+
+        <div id="results" class="results" style="display: none;">
+            <h3>結果</h3>
+            <div id="finalResults"></div>
+            <button class="button" onclick="startNewGame()" style="margin-top: 15px;">もう一度プレイ (Enter/Space)</button>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio API for sound effects
+        let audioContext;
+        let isAudioInitialized = false;
+
+        function initAudio() {
+            if (!isAudioInitialized) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    isAudioInitialized = true;
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
+            }
+        }
+
+        function playTone(frequency, duration, type = 'sine') {
+            if (!audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCardSound(cardsPlayed = 1) {
+            const baseFreq = 600 + (cardsPlayed * 12);
+            playTone(baseFreq, 0.15);
+        }
+
+        function playSuccessSound(cardsPlayed = 0) {
+            if (cardsPlayed >= 52) {
+                const frequencies = [523, 659, 784, 1047, 1318];
+                frequencies.forEach((freq, i) => {
+                    setTimeout(() => playTone(freq, 0.2), i * 100);
+                });
+            } else {
+                const baseFreq = 262 + (cardsPlayed * 15);
+                const frequencies = [baseFreq, baseFreq * 1.25, baseFreq * 1.5, baseFreq * 2];
+                frequencies.forEach((freq, i) => {
+                    setTimeout(() => playTone(freq, 0.2), i * 100);
+                });
+            }
+        }
+
+        function playErrorSound() {
+            playTone(200, 0.3, 'sawtooth');
+        }
+
+        function playPokerSound() {
+            const frequencies = [1047, 1175, 1318, 1568];
+            frequencies.forEach((freq, i) => {
+                setTimeout(() => playTone(freq, 0.15), i * 50);
+            });
+        }
+
+        function playGameStartSound() {
+            const frequencies = [261, 329, 392, 523];
+            frequencies.forEach((freq, i) => {
+                setTimeout(() => playTone(freq, 0.25), i * 150);
+            });
+
+            setTimeout(() => {
+                [523, 659, 784].forEach(freq => playTone(freq, 0.4));
+            }, 600);
+        }
+
+        // Game classes
+        class Card {
+            constructor(suit, rank) {
+                this.suit = suit;
+                this.rank = rank;
+            }
+
+            toString() {
+                return `${this.rank}${this.suit}`;
+            }
+
+            getSuitClass() {
+                const suitMap = {
+                    '♠': 'spade',
+                    '♥': 'heart',
+                    '♦': 'diamond',
+                    '♣': 'club'
+                };
+                return suitMap[this.suit] || '';
+            }
+
+            rankValue() {
+                if (this.rank === 'A') return 1;
+                if (['J', 'Q', 'K'].includes(this.rank)) {
+                    return {'J': 11, 'Q': 12, 'K': 13}[this.rank];
+                }
+                return parseInt(this.rank);
+            }
+        }
+
+        class Deck {
+            constructor() {
+                this.cards = [];
+                this.build();
+                this.shuffle();
+            }
+
+            build() {
+                const suits = ['♠', '♥', '♦', '♣'];
+                const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+                for (let suit of suits) {
+                    for (let rank of ranks) {
+                        this.cards.push(new Card(suit, rank));
+                    }
+                }
+            }
+
+            shuffle() {
+                for (let i = this.cards.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+                }
+            }
+
+            deal() {
+                return this.cards.pop();
+            }
+
+            isEmpty() {
+                return this.cards.length === 0;
+            }
+        }
+
+        class Hand {
+            constructor() {
+                this.cards = [];
+            }
+
+            addCard(card) {
+                this.cards.push(card);
+            }
+
+            addCardAtPosition(card, position) {
+                if (position >= 0 && position < this.cards.length) {
+                    this.cards.splice(position, 0, card);
+                } else {
+                    this.cards.push(card);
+                }
+            }
+
+            removeCardAtIndex(index) {
+                if (index >= 0 && index < this.cards.length) {
+                    return this.cards.splice(index, 1)[0];
+                }
+                return null;
+            }
+
+            canPlay(tableCard) {
+                return this.cards.some(card =>
+                    card.suit === tableCard.suit || card.rank === tableCard.rank
+                );
+            }
+
+            getPlayableCards(tableCard) {
+                return this.cards.filter(card =>
+                    card.suit === tableCard.suit || card.rank === tableCard.rank
+                );
+            }
+
+            checkPokerHand() {
+                if (this.cards.length !== 5) return [null, 0];
+
+                const suits = this.cards.map(card => card.suit);
+                const ranks = this.cards.map(card => card.rankValue());
+                const rankCounts = {};
+                const suitCounts = {};
+
+                ranks.forEach(rank => rankCounts[rank] = (rankCounts[rank] || 0) + 1);
+                suits.forEach(suit => suitCounts[suit] = (suitCounts[suit] || 0) + 1);
+
+                const isFlush = Object.keys(suitCounts).length === 1;
+                const sortedRanks = [...ranks].sort((a, b) => a - b);
+
+                let isStraight = false;
+                if (sortedRanks.join(',') === [1,2,3,4,5].join(',') ||
+                    sortedRanks.join(',') === [1,10,11,12,13].join(',') ||
+                    (sortedRanks[4] - sortedRanks[0] === 4 && new Set(sortedRanks).size === 5)) {
+                    isStraight = true;
+                }
+
+                const counts = Object.values(rankCounts).sort((a, b) => b - a);
+
+                if (isStraight && isFlush && sortedRanks.join(',') === [1,10,11,12,13].join(',')) {
+                    return ["ロイヤルフラッシュ", 1000];
+                } else if (isStraight && isFlush) {
+                    return ["ストレートフラッシュ", 500];
+                } else if (counts.join(',') === '4,1') {
+                    return ["フォーカード", 200];
+                } else if (counts.join(',') === '3,2') {
+                    return ["フルハウス", 100];
+                } else if (isFlush) {
+                    return ["フラッシュ", 50];
+                } else if (isStraight) {
+                    return ["ストレート", 25];
+                } else if (counts.join(',') === '3,1,1') {
+                    return ["スリーカード", 10];
+                }
+
+                return [null, 0];
+            }
+        }
+
+        // Game state
+        let deck, hand, tableCard, cardsPlayed, gameStats;
+
+        function initGame() {
+            deck = new Deck();
+            hand = new Hand();
+            tableCard = null;
+            cardsPlayed = 0;
+            gameStats = JSON.parse(localStorage.getItem('southHappy52Stats')) || {
+                gamesPlayed: 0,
+                totalCardsPlayed: 0,
+                completedGames: 0,
+                bestScore: 0,
+                pokerHands: {}
+            };
+        }
+
+        async function setupGame() {
+            let attempts = 0;
+            const maxAttempts = 100;
+
+            while (attempts < maxAttempts) {
+                deck = new Deck();
+                hand = new Hand();
+                cardsPlayed = 0;
+
+                // Deal initial hand
+                for (let i = 0; i < 5; i++) {
+                    hand.addCard(deck.deal());
+                }
+
+                // Set table card
+                tableCard = deck.deal();
+                cardsPlayed = 1;
+
+                if (hand.canPlay(tableCard)) {
+                    return true;
+                }
+
+                attempts++;
+                if (attempts < maxAttempts) {
+                    showMessage(`出せるカードがありません。再配布します... (${attempts}回目)`, 'info');
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+
+            showMessage(`${maxAttempts}回試行しましたが、有効なゲームを開始できませんでした。`, 'error');
+            return false;
+        }
+
+        async function startNewGame() {
+            initAudio();
+            initGame();
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('message').style.display = 'none';
+
+            playGameStartSound();
+
+            if (await setupGame()) {
+                document.getElementById('gameState').style.display = 'block';
+
+                // Check initial poker hand
+                const [pokerHand, bonus] = hand.checkPokerHand();
+                if (pokerHand) {
+                    showMessage(`🎉 初期手札で${pokerHand}が成立！ボーナス倍率: x${bonus}`, 'success');
+                    playPokerSound();
+                }
+
+                updateDisplay();
+
+                // Add keyboard event listener (if not already added)
+                if (!window.keyboardListenerAdded) {
+                    document.addEventListener('keydown', handleKeyPress);
+                    window.keyboardListenerAdded = true;
+                }
+            }
+        }
+
+        function handleKeyPress(event) {
+            // R key for new game (available anytime)
+            if (event.key.toLowerCase() === 'r') {
+                startNewGame();
+                return;
+            }
+
+            // Enter or Space for "play again" when results are shown
+            if (document.getElementById('results').style.display === 'block' &&
+                (event.key === 'Enter' || event.key === ' ')) {
+                startNewGame();
+                return;
+            }
+
+            // Game controls only when game is active
+            if (document.getElementById('gameState').style.display === 'none') return;
+
+            const keyMap = { 'a': 0, 's': 1, 'd': 2, 'f': 3, 'g': 4 };
+            const key = event.key.toLowerCase();
+
+            if (key === 'l') {
+                toggleCardList();
+                return;
+            }
+
+            if (keyMap.hasOwnProperty(key)) {
+                const cardIndex = keyMap[key];
+                if (cardIndex < hand.cards.length) {
+                    playCard(cardIndex);
+                }
+            }
+        }
+
+        function playCard(cardIndex) {
+            if (cardIndex < 0 || cardIndex >= hand.cards.length) {
+                playErrorSound();
+                showMessage('無効なカードです。', 'error');
+                return;
+            }
+
+            const selectedCard = hand.cards[cardIndex];
+            const playableCards = hand.getPlayableCards(tableCard);
+
+            if (!playableCards.includes(selectedCard)) {
+                playErrorSound();
+                showMessage('そのカードは出せません。', 'error');
+                return;
+            }
+
+            // Play the card
+            const removedCard = hand.removeCardAtIndex(cardIndex);
+            tableCard = removedCard;
+            cardsPlayed++;
+
+            playCardSound(cardsPlayed);
+
+            // Refill hand
+            if (!deck.isEmpty()) {
+                const newCard = deck.deal();
+                hand.addCardAtPosition(newCard, cardIndex);
+            }
+
+            updateDisplay();
+
+            // Check win condition
+            if (deck.isEmpty() && hand.cards.length === 0) {
+                endGame(true);
+            } else if (!hand.canPlay(tableCard)) {
+                endGame(false);
+            }
+        }
+
+        function endGame(isComplete) {
+            // Don't remove keyboard event listener - keep it for "R" and "Enter/Space" keys
+
+            if (isComplete) {
+                showMessage(`🎉 全カード(52枚)を出し切りました！`, 'success');
+                playSuccessSound(52);
+            } else {
+                showMessage('出せるカードがありません。ゲーム終了です。', 'info');
+            }
+
+            setTimeout(() => showResults(), 1000);
+        }
+
+        function showResults() {
+            const [pokerHand, pokerBonus] = hand.checkPokerHand();
+
+            let basePayout = 1;
+            if (cardsPlayed === 52) {
+                basePayout = 100;
+            } else {
+                basePayout = Math.max(1, Math.floor(cardsPlayed / 5));
+            }
+
+            const totalPayout = pokerBonus > 0 ? basePayout * pokerBonus : basePayout;
+
+            let resultsHtml = `
+                <div>出したカード数: ${cardsPlayed}/52枚</div>
+                <div>基本配当: x${basePayout}</div>
+            `;
+
+            if (pokerHand) {
+                resultsHtml += `
+                    <div>ポーカーボーナス: ${pokerHand} (x${pokerBonus})</div>
+                    <div>最終配当: x${basePayout} × x${pokerBonus} = x${totalPayout}</div>
+                `;
+                playPokerSound();
+            } else {
+                resultsHtml += `<div>最終配当: x${totalPayout}</div>`;
+            }
+
+            document.getElementById('finalResults').innerHTML = resultsHtml;
+            document.getElementById('gameState').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+
+            // Update stats
+            gameStats.gamesPlayed++;
+            gameStats.totalCardsPlayed += cardsPlayed;
+            if (cardsPlayed === 52) gameStats.completedGames++;
+            if (cardsPlayed > gameStats.bestScore) gameStats.bestScore = cardsPlayed;
+            if (pokerHand) {
+                gameStats.pokerHands[pokerHand] = (gameStats.pokerHands[pokerHand] || 0) + 1;
+            }
+
+            localStorage.setItem('southHappy52Stats', JSON.stringify(gameStats));
+        }
+
+        function updateDisplay() {
+            // Update table card
+            const tableCardElement = document.getElementById('tableCard');
+            tableCardElement.innerHTML = `<span class="card ${tableCard.getSuitClass()}">${tableCard.toString()}</span>`;
+
+            // Update stats
+            document.getElementById('cardsPlayed').textContent = cardsPlayed;
+            document.getElementById('remainingDeck').textContent = deck.cards.length;
+
+            // Update hand
+            const handContainer = document.getElementById('handCards');
+            const playableCards = hand.getPlayableCards(tableCard);
+
+            handContainer.innerHTML = '';
+            hand.cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = `card ${card.getSuitClass()}`;
+                cardElement.textContent = card.toString();
+                cardElement.onclick = () => playCard(index);
+
+                if (playableCards.includes(card)) {
+                    cardElement.classList.add('playable');
+                }
+
+                handContainer.appendChild(cardElement);
+            });
+
+            updateCardList();
+        }
+
+        function updateCardList() {
+            // Update hand cards list
+            const handList = document.getElementById('handCardsList');
+            const keyMapping = ['A', 'S', 'D', 'F', 'G'];
+            handList.innerHTML = hand.cards.map((card, i) =>
+                `<div>&nbsp;&nbsp;${keyMapping[i]}: <span class="card ${card.getSuitClass()}">${card.toString()}</span></div>`
+            ).join('');
+
+            // Update deck cards list
+            const deckList = document.getElementById('deckCardsList');
+            const deckBySuit = { '♠': [], '♥': [], '♦': [], '♣': [] };
+            deck.cards.forEach(card => deckBySuit[card.suit].push(card));
+
+            const allRanks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+            let deckHtml = `<div>(${deck.cards.length}枚)</div>`;
+            ['♠', '♥', '♦', '♣'].forEach(suit => {
+                deckHtml += `<div class="suit-row"><span class="suit-symbol ${new Card(suit, 'A').getSuitClass()}">${suit}:</span>`;
+                allRanks.forEach(rank => {
+                    const card = deckBySuit[suit].find(c => c.rank === rank);
+                    if (card) {
+                        deckHtml += `<span class="${card.getSuitClass()}">${rank}</span> `;
+                    } else {
+                        deckHtml += `<span style="opacity: 0.3;">${rank}</span> `;
+                    }
+                });
+                deckHtml += '</div>';
+            });
+
+            deckList.innerHTML = deckHtml;
+        }
+
+        function showMessage(text, type = 'info') {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = text;
+            messageElement.className = `message ${type}`;
+            messageElement.style.display = 'block';
+
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 3000);
+        }
+
+        function toggleRules() {
+            const rules = document.getElementById('rules');
+            rules.style.display = rules.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleCardList() {
+            const cardList = document.getElementById('cardList');
+            cardList.style.display = cardList.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showStats() {
+            if (gameStats.gamesPlayed === 0) {
+                showMessage('まだ統計データがありません。', 'info');
+                return;
+            }
+
+            const avgCards = (gameStats.totalCardsPlayed / gameStats.gamesPlayed).toFixed(1);
+            const completionRate = ((gameStats.completedGames / gameStats.gamesPlayed) * 100).toFixed(1);
+
+            let pokerStats = '';
+            if (Object.keys(gameStats.pokerHands).length > 0) {
+                pokerStats = '<br><strong>ポーカー役実績:</strong><br>' +
+                    Object.entries(gameStats.pokerHands)
+                        .map(([hand, count]) => `${hand}: ${count}回`)
+                        .join('<br>');
+            }
+
+            const statsHtml = `
+                <strong>ゲーム統計</strong><br>
+                プレイ回数: ${gameStats.gamesPlayed}回<br>
+                平均出したカード数: ${avgCards}枚<br>
+                最高記録: ${gameStats.bestScore}枚<br>
+                完走率: ${completionRate}%<br>
+                完走回数: ${gameStats.completedGames}回
+                ${pokerStats}
+            `;
+
+            const messageElement = document.getElementById('message');
+            messageElement.innerHTML = statsHtml;
+            messageElement.className = 'message info';
+            messageElement.style.display = 'block';
+
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 8000);
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            showMessage('「新しいゲーム」をクリックまたはRキーで開始してください', 'info');
+            // Add keyboard event listener immediately
+            document.addEventListener('keydown', handleKeyPress);
+            window.keyboardListenerAdded = true;
+        });
+    </script>
+</body>
+</html>
