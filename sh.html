@@ -81,14 +81,28 @@
         }
 
         .card.playable {
-            background-color: #fff;
+            background-color: #ffff80;
             color: #000;
-            border-color: #000;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border: 3px solid #ff6600;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+            animation: playablePulse 2s infinite;
+            transform: scale(1.05);
         }
 
         .card.playable:hover {
-            background-color: #f5f5f5;
+            background-color: #ffff40;
+            border-color: #ff4400;
+            box-shadow: 0 0 20px rgba(255, 68, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        @keyframes playablePulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(255, 102, 0, 0.9);
+            }
         }
 
         .card.spade {
@@ -502,13 +516,14 @@
         }
 
         // Game state
-        let deck, hand, tableCard, cardsPlayed, gameStats;
+        let deck, hand, tableCard, cardsPlayed, gameStats, pokerHandsAchieved;
 
         function initGame() {
             deck = new Deck();
             hand = new Hand();
             tableCard = null;
             cardsPlayed = 0;
+            pokerHandsAchieved = []; // 累計ポーカー役をリセット
             gameStats = JSON.parse(localStorage.getItem('southHappy52Stats')) || {
                 gamesPlayed: 0,
                 totalCardsPlayed: 0,
@@ -519,36 +534,17 @@
         }
 
         async function setupGame() {
-            let attempts = 0;
-            const maxAttempts = 100;
+            deck = new Deck();
+            hand = new Hand();
+            cardsPlayed = 0;
+            tableCard = null; // 台札は空で開始
 
-            while (attempts < maxAttempts) {
-                deck = new Deck();
-                hand = new Hand();
-                cardsPlayed = 0;
-
-                // Deal initial hand
-                for (let i = 0; i < 5; i++) {
-                    hand.addCard(deck.deal());
-                }
-
-                // Set table card
-                tableCard = deck.deal();
-                cardsPlayed = 1;
-
-                if (hand.canPlay(tableCard)) {
-                    return true;
-                }
-
-                attempts++;
-                if (attempts < maxAttempts) {
-                    showMessage(`出せるカードがありません。再配布します... (${attempts}回目)`, 'info');
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
+            // Deal initial hand
+            for (let i = 0; i < 5; i++) {
+                hand.addCard(deck.deal());
             }
 
-            showMessage(`${maxAttempts}回試行しましたが、有効なゲームを開始できませんでした。`, 'error');
-            return false;
+            return true; // 常に開始可能
         }
 
         async function startNewGame() {
@@ -566,6 +562,7 @@
                 // Check initial poker hand
                 const [pokerHand, bonus] = hand.checkPokerHand();
                 if (pokerHand) {
+                    pokerHandsAchieved.push([pokerHand, bonus]);
                     showMessage(`🎉 初期手札で${pokerHand}が成立！ボーナス倍率: x${bonus}`, 'success');
                     playPokerSound();
                 }
@@ -621,7 +618,14 @@
             }
 
             const selectedCard = hand.cards[cardIndex];
-            const playableCards = hand.getPlayableCards(tableCard);
+            let playableCards;
+
+            if (tableCard) {
+                playableCards = hand.getPlayableCards(tableCard);
+            } else {
+                // 台札がない場合は全てのカードが出せる
+                playableCards = hand.cards;
+            }
 
             if (!playableCards.includes(selectedCard)) {
                 playErrorSound();
@@ -642,12 +646,15 @@
                 hand.addCardAtPosition(newCard, cardIndex);
             }
 
+            // 毎回ポーカー役をチェック
+            checkAndAddPokerHand();
+
             updateDisplay();
 
             // Check win condition
             if (deck.isEmpty() && hand.cards.length === 0) {
                 endGame(true);
-            } else if (!hand.canPlay(tableCard)) {
+            } else if (tableCard && !hand.canPlay(tableCard)) {
                 endGame(false);
             }
         }
@@ -665,8 +672,17 @@
             setTimeout(() => showResults(), 1000);
         }
 
-        function showResults() {
+        function checkAndAddPokerHand() {
             const [pokerHand, pokerBonus] = hand.checkPokerHand();
+            if (pokerHand) {
+                pokerHandsAchieved.push([pokerHand, pokerBonus]);
+                showMessage(`🎉 ${pokerHand}が成立！ボーナス倍率: x${pokerBonus}`, 'success');
+                playPokerSound();
+            }
+        }
+
+        function showResults() {
+            const [finalPokerHand, finalPokerBonus] = hand.checkPokerHand();
 
             let basePayout = 1;
             if (cardsPlayed === 52) {
@@ -675,18 +691,38 @@
                 basePayout = Math.max(1, Math.floor(cardsPlayed / 5));
             }
 
-            const totalPayout = pokerBonus > 0 ? basePayout * pokerBonus : basePayout;
+            // 累計ポーカーボーナス計算
+            let totalPokerBonus = 0;
+            for (const [hand, bonus] of pokerHandsAchieved) {
+                totalPokerBonus += bonus;
+            }
+
+            // 最終配当計算
+            const totalBonus = totalPokerBonus + finalPokerBonus;
+            const totalPayout = totalBonus > 0 ? basePayout * totalBonus : basePayout;
 
             let resultsHtml = `
                 <div>出したカード数: ${cardsPlayed}/52枚</div>
                 <div>基本配当: x${basePayout}</div>
             `;
 
-            if (pokerHand) {
-                resultsHtml += `
-                    <div>ポーカーボーナス: ${pokerHand} (x${pokerBonus})</div>
-                    <div>最終配当: x${basePayout} × x${pokerBonus} = x${totalPayout}</div>
-                `;
+            // 累計ポーカー役を表示
+            if (pokerHandsAchieved.length > 0) {
+                resultsHtml += `<div><br>累計ポーカー役:</div>`;
+                for (const [hand, bonus] of pokerHandsAchieved) {
+                    resultsHtml += `<div>  ${hand} (x${bonus})</div>`;
+                }
+                resultsHtml += `<div>累計ボーナス: x${totalPokerBonus}</div>`;
+            }
+
+            // 最終手札のポーカー役を表示
+            if (finalPokerHand) {
+                resultsHtml += `<div>最終手札: ${finalPokerHand} (x${finalPokerBonus})</div>`;
+            }
+
+            // 最終配当を表示
+            if (totalBonus > 0) {
+                resultsHtml += `<div>最終配当: x${basePayout} × x${totalBonus} = x${totalPayout}</div>`;
                 playPokerSound();
             } else {
                 resultsHtml += `<div>最終配当: x${totalPayout}</div>`;
@@ -701,8 +737,13 @@
             gameStats.totalCardsPlayed += cardsPlayed;
             if (cardsPlayed === 52) gameStats.completedGames++;
             if (cardsPlayed > gameStats.bestScore) gameStats.bestScore = cardsPlayed;
-            if (pokerHand) {
-                gameStats.pokerHands[pokerHand] = (gameStats.pokerHands[pokerHand] || 0) + 1;
+
+            // 累計ポーカー役を統計に追加
+            for (const [hand, bonus] of pokerHandsAchieved) {
+                gameStats.pokerHands[hand] = (gameStats.pokerHands[hand] || 0) + 1;
+            }
+            if (finalPokerHand) {
+                gameStats.pokerHands[finalPokerHand] = (gameStats.pokerHands[finalPokerHand] || 0) + 1;
             }
 
             localStorage.setItem('southHappy52Stats', JSON.stringify(gameStats));
@@ -711,7 +752,11 @@
         function updateDisplay() {
             // Update table card
             const tableCardElement = document.getElementById('tableCard');
-            tableCardElement.innerHTML = `<span class="card ${tableCard.getSuitClass()}">${tableCard.toString()}</span>`;
+            if (tableCard) {
+                tableCardElement.innerHTML = `<span class="card ${tableCard.getSuitClass()}">${tableCard.toString()}</span>`;
+            } else {
+                tableCardElement.innerHTML = 'なし（最初のカードを選んでください）';
+            }
 
             // Update stats
             document.getElementById('cardsPlayed').textContent = cardsPlayed;
@@ -719,7 +764,13 @@
 
             // Update hand
             const handContainer = document.getElementById('handCards');
-            const playableCards = hand.getPlayableCards(tableCard);
+            let playableCards;
+            if (tableCard) {
+                playableCards = hand.getPlayableCards(tableCard);
+            } else {
+                // 台札がない場合は全てのカードが選択可能
+                playableCards = hand.cards;
+            }
 
             handContainer.innerHTML = '';
             hand.cards.forEach((card, index) => {
