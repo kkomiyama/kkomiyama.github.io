@@ -200,7 +200,7 @@
         }
 
         .card-list {
-            display: none;
+            display: block;
             background-color: #e8e8e8;
             border: 2px solid #888;
             padding: 15px;
@@ -208,6 +208,13 @@
             border-radius: 5px;
             max-height: 400px;
             overflow-y: auto;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
         }
 
         .suit-row {
@@ -260,9 +267,6 @@
 
         <div class="controls">
             <button class="button" onclick="startNewGame()">新しいゲーム</button>
-            <button class="button" onclick="toggleRules()">ルール表示</button>
-            <button class="button" onclick="toggleCardList()">カード一覧</button>
-            <button class="button" onclick="showStats()">統計表示</button>
         </div>
 
         <div id="message" class="message" style="display: none;"></div>
@@ -276,18 +280,26 @@
             <div class="hand-container">
                 <div>あなたの手札:</div>
                 <div id="handCards" class="hand-cards"></div>
+
+                <div class="controls" style="margin-top: 15px;">
+                    <button class="button" onclick="startNewGame()">新しいゲーム</button>
+                    <button class="button" onclick="toggleRules()">ルール表示</button>
+                    <button class="button" onclick="showStats()">統計表示</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="results" style="display: none;">
+            <h3>結果</h3>
+            <div id="finalResults"></div>
+            <div class="controls" style="margin-top: 15px;">
+                <button class="button" onclick="startNewGame()">もう一度プレイ (Enter/Space)</button>
             </div>
         </div>
 
         <div id="cardList" class="card-list">
             <h3>カード一覧</h3>
             <div id="deckCardsList"></div>
-        </div>
-
-        <div id="results" class="results" style="display: none;">
-            <h3>結果</h3>
-            <div id="finalResults"></div>
-            <button class="button" onclick="startNewGame()" style="margin-top: 15px;">もう一度プレイ (Enter/Space)</button>
         </div>
     </div>
 
@@ -592,11 +604,6 @@
 
             const keyMap = { 'a': 0, 's': 1, 'd': 2, 'f': 3, 'g': 4 };
             const key = event.key.toLowerCase();
-
-            if (key === 'l') {
-                toggleCardList();
-                return;
-            }
 
             if (keyMap.hasOwnProperty(key)) {
                 const cardIndex = keyMap[key];
@@ -920,11 +927,6 @@
         function toggleRules() {
             const rules = document.getElementById('rules');
             rules.style.display = rules.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function toggleCardList() {
-            const cardList = document.getElementById('cardList');
-            cardList.style.display = cardList.style.display === 'none' ? 'block' : 'none';
         }
 
         function showStats() {
