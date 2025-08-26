@@ -250,8 +250,8 @@
             <strong>ルール:</strong><br>
             ・手札から台札と同じマークまたは数字のカードを出す<br>
             ・出せなくなるまで続ける<br>
-            ・52枚全部出し切れば100倍配当！<br>
-            ・ポーカー役でボーナス配当！<br>
+            ・出したカード数でスコア: 0-9枚=0点、10-12枚=1点、13-15枚=2点...52枚=100点<br>
+            ・ポーカー役でボーナス: フラッシュ+1点、フルハウス+2点、フォーカード+5点、ストレートフラッシュ+20点、ロイヤルストレートフラッシュ+100点<br>
             ・カードをクリックして選択<br>
             ・キーボードでA,S,D,F,Gキーでも操作可能<br>
             ・Rキーで新しいゲーム<br>
@@ -271,7 +271,6 @@
             <div class="stats">
                 <span>台札: <span id="tableCard"></span></span>
                 <span>出したカード数: <span id="cardsPlayed">0</span>/52</span>
-                <span>残りデッキ: <span id="remainingDeck">0</span>枚</span>
             </div>
 
             <div class="hand-container">
@@ -282,9 +281,6 @@
 
         <div id="cardList" class="card-list">
             <h3>カード一覧</h3>
-            <div><strong>【手札】</strong></div>
-            <div id="handCardsList"></div>
-            <div style="margin-top: 15px;"><strong>【残りデッキ】</strong></div>
             <div id="deckCardsList"></div>
         </div>
 
@@ -496,19 +492,19 @@
                 const counts = Object.values(rankCounts).sort((a, b) => b - a);
 
                 if (isStraight && isFlush && sortedRanks.join(',') === [1,10,11,12,13].join(',')) {
-                    return ["ロイヤルフラッシュ", 1000];
+                    return ["ロイヤルストレートフラッシュ", 100];
                 } else if (isStraight && isFlush) {
-                    return ["ストレートフラッシュ", 500];
+                    return ["ストレートフラッシュ", 20];
                 } else if (counts.join(',') === '4,1') {
-                    return ["フォーカード", 200];
+                    return ["フォーカード", 5];
                 } else if (counts.join(',') === '3,2') {
-                    return ["フルハウス", 100];
+                    return ["フルハウス", 2];
                 } else if (isFlush) {
-                    return ["フラッシュ", 50];
+                    return ["フラッシュ", 1];
                 } else if (isStraight) {
-                    return ["ストレート", 25];
+                    return ["ストレート", 1];
                 } else if (counts.join(',') === '3,1,1') {
-                    return ["スリーカード", 10];
+                    return ["スリーカード", 1];
                 }
 
                 return [null, 0];
@@ -563,7 +559,7 @@
                 const [pokerHand, bonus] = hand.checkPokerHand();
                 if (pokerHand) {
                     pokerHandsAchieved.push([pokerHand, bonus]);
-                    showMessage(`🎉 初期手札で${pokerHand}が成立！ボーナス倍率: x${bonus}`, 'success');
+                    showMessage(`🎉 初期手札で${pokerHand}が成立！ボーナス: +${bonus}点`, 'success');
                     playPokerSound();
                 }
 
@@ -676,7 +672,7 @@
             const [pokerHand, pokerBonus] = hand.checkPokerHand();
             if (pokerHand) {
                 pokerHandsAchieved.push([pokerHand, pokerBonus]);
-                showMessage(`🎉 ${pokerHand}が成立！ボーナス倍率: x${pokerBonus}`, 'success');
+                showMessage(`🎉 ${pokerHand}が成立！ボーナス: +${pokerBonus}点`, 'success');
                 playPokerSound();
             }
         }
@@ -684,11 +680,78 @@
         function showResults() {
             const [finalPokerHand, finalPokerBonus] = hand.checkPokerHand();
 
-            let basePayout = 1;
-            if (cardsPlayed === 52) {
-                basePayout = 100;
-            } else {
-                basePayout = Math.max(1, Math.floor(cardsPlayed / 5));
+            // カード枚数に応じたスコア計算（新しいスコア表）
+            let baseScore = 0;
+            if (cardsPlayed <= 9) {
+                baseScore = 0;
+            } else if (cardsPlayed <= 12) {
+                baseScore = 1;
+            } else if (cardsPlayed <= 15) {
+                baseScore = 2;
+            } else if (cardsPlayed <= 18) {
+                baseScore = 3;
+            } else if (cardsPlayed <= 20) {
+                baseScore = 4;
+            } else if (cardsPlayed <= 22) {
+                baseScore = 5;
+            } else if (cardsPlayed <= 24) {
+                baseScore = 6;
+            } else if (cardsPlayed === 25) {
+                baseScore = 7;
+            } else if (cardsPlayed === 26) {
+                baseScore = 8;
+            } else if (cardsPlayed === 27) {
+                baseScore = 9;
+            } else if (cardsPlayed === 28) {
+                baseScore = 10;
+            } else if (cardsPlayed === 29) {
+                baseScore = 11;
+            } else if (cardsPlayed === 30) {
+                baseScore = 12;
+            } else if (cardsPlayed === 31) {
+                baseScore = 13;
+            } else if (cardsPlayed === 32) {
+                baseScore = 14;
+            } else if (cardsPlayed === 33) {
+                baseScore = 15;
+            } else if (cardsPlayed === 34) {
+                baseScore = 16;
+            } else if (cardsPlayed === 35) {
+                baseScore = 17;
+            } else if (cardsPlayed === 36) {
+                baseScore = 18;
+            } else if (cardsPlayed === 37) {
+                baseScore = 19;
+            } else if (cardsPlayed === 38) {
+                baseScore = 20;
+            } else if (cardsPlayed === 39) {
+                baseScore = 22;
+            } else if (cardsPlayed === 40) {
+                baseScore = 24;
+            } else if (cardsPlayed === 41) {
+                baseScore = 26;
+            } else if (cardsPlayed === 42) {
+                baseScore = 28;
+            } else if (cardsPlayed === 43) {
+                baseScore = 30;
+            } else if (cardsPlayed === 44) {
+                baseScore = 35;
+            } else if (cardsPlayed === 45) {
+                baseScore = 40;
+            } else if (cardsPlayed === 46) {
+                baseScore = 45;
+            } else if (cardsPlayed === 47) {
+                baseScore = 50;
+            } else if (cardsPlayed === 48) {
+                baseScore = 60;
+            } else if (cardsPlayed === 49) {
+                baseScore = 70;
+            } else if (cardsPlayed === 50) {
+                baseScore = 80;
+            } else if (cardsPlayed === 51) {
+                baseScore = 90;
+            } else if (cardsPlayed >= 52) {
+                baseScore = 100;
             }
 
             // 累計ポーカーボーナス計算
@@ -697,35 +760,33 @@
                 totalPokerBonus += bonus;
             }
 
-            // 最終配当計算
-            const totalBonus = totalPokerBonus + finalPokerBonus;
-            const totalPayout = totalBonus > 0 ? basePayout * totalBonus : basePayout;
+            // 最終スコア計算（加算方式）
+            const totalScore = baseScore + totalPokerBonus + finalPokerBonus;
 
             let resultsHtml = `
                 <div>出したカード数: ${cardsPlayed}/52枚</div>
-                <div>基本配当: x${basePayout}</div>
+                <div>基本スコア: ${baseScore}点</div>
             `;
 
             // 累計ポーカー役を表示
             if (pokerHandsAchieved.length > 0) {
                 resultsHtml += `<div><br>累計ポーカー役:</div>`;
                 for (const [hand, bonus] of pokerHandsAchieved) {
-                    resultsHtml += `<div>  ${hand} (x${bonus})</div>`;
+                    resultsHtml += `<div>  ${hand} (+${bonus}点)</div>`;
                 }
-                resultsHtml += `<div>累計ボーナス: x${totalPokerBonus}</div>`;
+                resultsHtml += `<div>累計ボーナス: +${totalPokerBonus}点</div>`;
             }
 
             // 最終手札のポーカー役を表示
             if (finalPokerHand) {
-                resultsHtml += `<div>最終手札: ${finalPokerHand} (x${finalPokerBonus})</div>`;
+                resultsHtml += `<div>最終手札: ${finalPokerHand} (+${finalPokerBonus}点)</div>`;
             }
 
-            // 最終配当を表示
-            if (totalBonus > 0) {
-                resultsHtml += `<div>最終配当: x${basePayout} × x${totalBonus} = x${totalPayout}</div>`;
+            // 最終スコアを表示
+            resultsHtml += `<div><br><strong>最終スコア: ${totalScore}点</strong></div>`;
+
+            if (totalPokerBonus > 0 || finalPokerBonus > 0) {
                 playPokerSound();
-            } else {
-                resultsHtml += `<div>最終配当: x${totalPayout}</div>`;
             }
 
             document.getElementById('finalResults').innerHTML = resultsHtml;
@@ -760,7 +821,6 @@
 
             // Update stats
             document.getElementById('cardsPlayed').textContent = cardsPlayed;
-            document.getElementById('remainingDeck').textContent = deck.cards.length;
 
             // Update hand
             const handContainer = document.getElementById('handCards');
@@ -790,30 +850,55 @@
         }
 
         function updateCardList() {
-            // Update hand cards list
-            const handList = document.getElementById('handCardsList');
-            const keyMapping = ['A', 'S', 'D', 'F', 'G'];
-            handList.innerHTML = hand.cards.map((card, i) =>
-                `<div>&nbsp;&nbsp;${keyMapping[i]}: <span class="card ${card.getSuitClass()}">${card.toString()}</span></div>`
-            ).join('');
-
-            // Update deck cards list
+            // Update deck cards list with status colors
             const deckList = document.getElementById('deckCardsList');
-            const deckBySuit = { '♠': [], '♥': [], '♦': [], '♣': [] };
-            deck.cards.forEach(card => deckBySuit[card.suit].push(card));
-
             const allRanks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
-            let deckHtml = `<div>(${deck.cards.length}枚)</div>`;
+            // Create a map of all 52 cards and their current status
+            const cardStatus = {}; // 'hand', 'deck', 'table', 'played'
+
+            // Mark cards in hand as 'hand'
+            hand.cards.forEach(card => {
+                const cardKey = `${card.suit}${card.rank}`;
+                cardStatus[cardKey] = 'hand';
+            });
+
+            // Mark cards in deck as 'deck'
+            deck.cards.forEach(card => {
+                const cardKey = `${card.suit}${card.rank}`;
+                cardStatus[cardKey] = 'deck';
+            });
+
+            // Mark table card as 'table'
+            if (tableCard) {
+                const tableCardKey = `${tableCard.suit}${tableCard.rank}`;
+                cardStatus[tableCardKey] = 'table';
+            }
+
+            // All remaining cards are 'played'
+
+            let tableCount = tableCard ? 1 : 0;
+            let deckHtml = '';
+
             ['♠', '♥', '♦', '♣'].forEach(suit => {
                 deckHtml += `<div class="suit-row"><span class="suit-symbol ${new Card(suit, 'A').getSuitClass()}">${suit}:</span>`;
                 allRanks.forEach(rank => {
-                    const card = deckBySuit[suit].find(c => c.rank === rank);
-                    if (card) {
-                        deckHtml += `<span class="${card.getSuitClass()}">${rank}</span> `;
-                    } else {
-                        deckHtml += `<span style="opacity: 0.3;">${rank}</span> `;
+                    const cardKey = `${suit}${rank}`;
+                    const status = cardStatus[cardKey] || 'played';
+
+                    let color = '#999'; // played (gray)
+                    let display = rank;
+
+                    if (status === 'hand') {
+                        color = 'red';
+                    } else if (status === 'deck') {
+                        color = 'black';
+                    } else if (status === 'table') {
+                        color = 'blue';
+                        display = '■';
                     }
+
+                    deckHtml += `<span style="color: ${color};">${display}</span> `;
                 });
                 deckHtml += '</div>';
             });
