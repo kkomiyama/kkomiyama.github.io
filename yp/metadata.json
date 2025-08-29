@@ -1,0 +1,5 @@
+{
+  "name": "Yokohama Poker",
+  "description": "A solitaire card game where you play cards matching the suit or rank of the previous card. Score points by playing cards and forming poker hands in your 5-card hand. The goal is to play all 52 cards.",
+  "requestFramePermissions": []
+}
