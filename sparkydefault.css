@@ -114,6 +114,11 @@
         margin: 0;
       }
 
+      li::marker {
+        color: #cccccc;
+        font-size: 0.7em;
+      }
+
       ul,
       ol {
         padding-left: 30px;
